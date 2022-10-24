@@ -40,13 +40,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     String updateDiscusById = "/**/api/tasks/updateDiscusById";
     String getDiscus = "/**/api/tasks/getDiscus";
     String updateAssign = "/**/api/tasks/updateAssign";
+    String getRelation = "/**/api/relation/getRelation";
+    String addRelation = "/**/api/relation/addRelation";
  
     @Override
     protected void configure (HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .authorizeRequests().antMatchers(updateAssign,updateDiscusById,getDiscus,register,login,relogin,addtask,gettask,remove,update,gettaskid,adddetail,customerid,deleteDiscusById,customerall).anonymous()
+            .authorizeRequests().antMatchers(updateAssign,updateDiscusById,addRelation,getRelation,
+            getDiscus,register,login,relogin,addtask,gettask,remove,update,gettaskid,adddetail,customerid,deleteDiscusById,customerall).anonymous()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(jwtFilterBean(), UsernamePasswordAuthenticationFilter.class);

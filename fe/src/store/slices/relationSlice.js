@@ -53,11 +53,11 @@ export const relationSlice = createSlice({
 
 export const addRelataion = (data) => async (dispatch) => {
   try {
-    console.log(data);
-    if (data.linkType === "Child") {
-      dispatch(addChild(data.valueToLink))
-    }else if (data.linkType === "Parent") {
+    
+    if (data.linkType === 1) {
       dispatch(addParent(data.valueToLink))
+    }else if (data.linkType === 2) {
+      dispatch(addChild(data.valueToLink))
     }else{
       dispatch(addDuplicate(data.valueToLink))
     }

@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.clone_azuredevops.be.entity.jpa.discussion.Discussion;
+import com.clone_azuredevops.be.entity.jpa.relation.Relation;
 import com.clone_azuredevops.be.entity.jpa.task.Task;
 import com.clone_azuredevops.be.model.task.DiscussionRequest;
 import com.clone_azuredevops.be.model.task.DiscussionResponse;
 import com.clone_azuredevops.be.model.task.TaskRequest;
 import com.clone_azuredevops.be.model.task.TaskResponse;
 import com.clone_azuredevops.be.repository.jpa.DiscussionRepository;
+import com.clone_azuredevops.be.repository.jpa.RelationRepository;
 import com.clone_azuredevops.be.repository.jpa.TaskRepository;
 
 @Service
@@ -29,6 +31,9 @@ public class TaskService {
 
     @Autowired
     DiscussionRepository discussionRepository;
+
+    @Autowired
+    RelationRepository relationRepository;
 
     public TaskResponse addTask(TaskRequest taskRequest) {
         Task task = new Task();
@@ -109,7 +114,7 @@ public class TaskService {
     }
 
     public List<Task> getTask() {
-    return taskRepository.findAll();
+        return taskRepository.findAll();
     }
 
     public TaskResponse getTaskById(TaskRequest taskRequest) {
@@ -131,9 +136,10 @@ public class TaskService {
         taskResponse.setUpdateBy(task.getUpdateBy());
         taskResponse.setCreatedDate(task.getCreatedDate());
         taskResponse.setUpdateDate(task.getUpdateDate());
-
         List<Discussion> discussionList = discussionRepository.findByTaskIdOrderByCreatedDateDesc(task.getTaskId());
+        List<Relation> relationList = relationRepository.findByTaskId(task.getTaskId());
         taskResponse.setDiscussion(discussionList);   
+        taskResponse.setRelations(relationList);   
         return taskResponse;
     }
     

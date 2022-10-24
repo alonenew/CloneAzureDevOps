@@ -22,6 +22,7 @@ const initialState = {
       items: []
     }
   },
+  search: null
 }
 
 export const getTask = createAsyncThunk(

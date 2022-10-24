@@ -70,7 +70,8 @@ function ItemDnD({ col, item, index, openN, openC, name }) {
           <div className='px-3'>
             <div className="flex flex-wrap pt-3">
               <img className='w-4 h-4 mr-1 mb-1' src="https://www.svgrepo.com/show/193759/open-book-book.svg" alt="" />
-              <span className='text-xs break-all cursor-pointer hover:underline' onClick={() => handleModal(item.taskId)}><span className='font-bold text-xs mr-1'>{item.taskId}</span>{item.name}</span>
+              <span className='text-xs break-all cursor-pointer hover:underline' onClick={() => handleModal(item.taskId)}>
+                <span className='font-bold text-xs mr-1'>{item.taskId}</span>{item.name}</span>
             </div>
             {assign && 
               <div className='flex items-center relative mt-2'>
@@ -101,7 +102,7 @@ function ItemDnD({ col, item, index, openN, openC, name }) {
           </div>
         </div>
       </div>
-      {open && <Modal open={open} setOpen={setOpen} item={item} index={index} col={col} />}
+      {open && <Modal open={open} setOpen={setOpen} />}
 
     </>
   } else if ((name !== "New" && name !== "Closed")) {

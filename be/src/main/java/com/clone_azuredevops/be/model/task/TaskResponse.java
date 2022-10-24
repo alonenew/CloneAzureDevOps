@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.clone_azuredevops.be.entity.jpa.discussion.Discussion;
+import com.clone_azuredevops.be.entity.jpa.relation.Relation;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 public class TaskResponse {
 
     private List<Discussion> discussion;
+    private List<Relation> relations;
     private Integer taskId;
     private String customerId;
     private String name;

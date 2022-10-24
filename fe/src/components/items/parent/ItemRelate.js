@@ -1,20 +1,26 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs'
 import 'dayjs/locale/th'
 import { selectRelation } from '../../../store/slices/relationSlice';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'
+import { openModal } from '../../../store/slices/itemSlice';
 
 function BoxRelate({showLinkTo, name}){
+    const dispatch = useDispatch();
+    const handleModal = (id) => {
+        dispatch(openModal(id));
+    }
+
     return <Box sx={{margin: 1}}>
         <Typography variant="caption">
             {name}
         </Typography>
         <div className='flex items-center '>
             <img src="https://www.svgrepo.com/show/53135/book.svg" className="w-4 h-4 mr-2" alt="" />
-            <Typography variant="body2" className='text-sm cursor-pointer underline'>
-                {showLinkTo.name}
+            <Typography variant="body2" className='text-sm cursor-pointer underline' onClick={() => handleModal(showLinkTo.taskId)}>
+                {showLinkTo.taskId +" "+ showLinkTo.name}
             </Typography>
         </div>
         <div className='ml-6 '>
@@ -31,36 +37,35 @@ function BoxRelate({showLinkTo, name}){
 
 function ItemRelate({items}) {
     const relate = useSelector(selectRelation);
-    let Child, Parent, Duplicate;
-    console.log(relate);
+    let child, parent, duplicate;
     if (items && relate.Child.valueToLink) {
-        Child = items.find(item => {
+        child = items.find(item => {
             return item.taskId === relate.Child.valueToLink
         })
     }
     if (items && relate.Parent.valueToLink) {
-        Parent = items.find(item => {
+        parent = items.find(item => {
             return item.taskId === relate.Parent.valueToLink
         })
     }
     if (items && relate.Duplicate.valueToLink) {
-        Duplicate = items.find(item => {
+        duplicate = items.find(item => {
             return item.taskId === relate.Duplicate.valueToLink
         })
     }
 
   return (
     <>
-        {relate.Child.valueToLink ? 
-            <BoxRelate showLinkTo={Child} name={relate.Child.linkType}/>
+        {parent ?
+            <BoxRelate showLinkTo={parent} name={relate.Parent.linkType}/>
             : null
         }
-        {relate.Parent.valueToLink ?
-            <BoxRelate showLinkTo={Parent} name={relate.Parent.linkType}/>
+        {child ? 
+            <BoxRelate showLinkTo={child} name={relate.Child.linkType}/>
             : null
         }
-        {relate.Duplicate.valueToLink ? 
-            <BoxRelate showLinkTo={Duplicate} name={relate.Duplicate.linkType}/>
+        {duplicate ? 
+            <BoxRelate showLinkTo={duplicate} name={relate.Duplicate.linkType}/>
             : null
         }
     </>

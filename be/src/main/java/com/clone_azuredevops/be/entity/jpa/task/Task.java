@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.FetchMode;
 
 import com.clone_azuredevops.be.entity.jpa.discussion.Discussion;
+import com.clone_azuredevops.be.entity.jpa.relation.Relation;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Fetch;
@@ -82,5 +83,9 @@ public class Task {
     @OneToMany(mappedBy = "task", orphanRemoval = true, fetch = FetchType.EAGER) // 1 ประกาศ มีได้หลายรูป
     @Fetch(value = FetchMode.SELECT)
     private List<Discussion> discussions;
+
+    @OneToMany(mappedBy = "task", orphanRemoval = true, fetch = FetchType.EAGER) // 1 ประกาศ มีได้หลายรูป
+    @Fetch(value = FetchMode.SELECT)
+    private List<Relation> relations;
     
 }

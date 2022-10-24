@@ -37,8 +37,8 @@ function HeaderDetail({ item, setOpen, setStatus, assign, setAssign, submit , na
                         <img src='https://www.svgrepo.com/show/165196/user.svg' alt='' className={`z-0 absolute w-5 h-5`} />
                         <select className='overflow-visible focus:z-10 focus:pl-1 w-full pl-6
                         hover:outline focus:outline outline-1 outline-cyan-500 py-0.5 text-black 
-                        text-sm appearance-none' value={assign} onChange={(e) => setAssign(e.target.value)} >
-                            <option value={null}>Unassisned</option>
+                        text-sm appearance-none' value={assign ? assign : ''} onChange={(e) => setAssign(e.target.value)} >
+                            <option value=''>Unassisned</option>
                             {listUser ? listUser.map((user, index) =>
                                 <option key={index} value={user.customerId}> {user.firstName + " " + user.lastName} </option>
                             ) : null}

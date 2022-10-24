@@ -23,7 +23,7 @@ function PaperComponent(props) {
   );
 }
 
-export default function Modal({ open, setOpen, index }) {
+export default function Modal({ open, setOpen }) {
   const taskId = useSelector(selectSearch);
   const [height, setHeight] = useState(window.innerHeight * 0.9);
   const [width, setWidth] = useState(window.innerWidth * 0.9);
@@ -33,12 +33,13 @@ export default function Modal({ open, setOpen, index }) {
   useEffect(() => {
     axios.post(BASE_URL + "tasks/gettaskid", { taskId: taskId })
       .then(async (res) => {
+        setLoading(true);
         setItem(res.data.data)
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 50));
         setLoading(false)
       })// eslint-disable-next-line
-  }, [])
-
+  }, [taskId])
+console.log(item);
   return (
     <>
       <Dialog
@@ -61,7 +62,7 @@ export default function Modal({ open, setOpen, index }) {
               <DialogTitle style={{ cursor: "move", height: "15px", width: "100%", padding: 0, position: "absolute" }} id="draggable-dialog-title">
               </DialogTitle>
               {!loading && 
-                <DetailModal item={item} setOpen={setOpen} index={index} />
+                <DetailModal item={item} setOpen={setOpen} />
               }
             </DialogContentText>
           </>

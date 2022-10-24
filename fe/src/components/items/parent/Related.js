@@ -12,14 +12,18 @@ import 'dayjs/locale/th'
 import axios from 'axios';
 import { BASE_URL } from '../../../Const';
 import ItemRelate from './ItemRelate';
+import { addRelataion, clearRelation } from '../../../store/slices/relationSlice';
+import { useDispatch } from 'react-redux';
 
 function Related({ item }) {
     dayjs.extend(buddhistEra)
+    const dispatch = useDispatch();
     const [items, setItems] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [openRelated, setOpenRelated] = useState(true);
     const [openExisting, setOpenExisting] = useState(false);
     const [openNewItem, setOpenNewItem] = useState(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     
 
@@ -27,6 +31,15 @@ function Related({ item }) {
         axios.get(BASE_URL + 'tasks/gettask').then((res) => {
             setItems(res.data.filter(list => list.taskId !== item.taskId));
         });
+        dispatch(clearRelation());
+        item = item.relations.map((listRelation) => {
+            dispatch(addRelataion({
+                taskId: listRelation.taskId, linkType: listRelation.linkType, valueToLink: listRelation.taskLink
+            }))
+        setIsLoading(false);
+        })
+
+            
     }, [])
 
     const handleExisting = () => {
@@ -38,7 +51,6 @@ function Related({ item }) {
         setOpenNewItem(true);
         setAnchorEl(null);
     }
-
     return (
         <>
             <div className="hover:text-blue-900 hover:border-blue-200 border-b-2 pb-1 mt-2" onClick={() => setOpenRelated(!openRelated)}>
@@ -76,7 +88,7 @@ function Related({ item }) {
                         </Typography>
                     </Box>
 
-                    <ItemRelate items={items}/>
+                    {!isLoading ? <ItemRelate items={items} /> : null}
                                 
                     <DialogExiting item={item} items={items}  open={openExisting} setOpen={setOpenExisting} />
                     <DialogNewItem item={item} items={items} open={openNewItem} setOpen={setOpenNewItem} />
