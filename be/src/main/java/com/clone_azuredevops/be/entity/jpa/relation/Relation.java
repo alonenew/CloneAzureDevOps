@@ -1,21 +1,14 @@
 package com.clone_azuredevops.be.entity.jpa.relation;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.FetchMode;
 
-import com.clone_azuredevops.be.entity.jpa.discussion.Discussion;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import org.hibernate.annotations.Fetch;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,11 +24,18 @@ public class Relation {
     @Column(name = "relation_id" , nullable = false, length = 50)
     private String relationId;
 
+    @Column(name = "link_type" , nullable = false)
+    private Integer linkType;
+
     @Column(name = "task_id" , nullable = false, length = 50)
     private Integer taskId;
 
-    
-    
+    @Column(name = "task_link" , nullable = false, length = 50)
+    private Integer taskLink;
+
+    @Column(name = "comment")
+    private String comment;
+
     @Column(name = "created_date" , nullable = false)
     private Date createdDate;
 
