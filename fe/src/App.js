@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
 } from "react-router-dom";
 import Main from "./pages/private/Main";
 import Navbar from "./components/layouts/Navbar";
@@ -14,8 +15,8 @@ import TaskId from "./pages/private/TaskId";
 
 
 function App() {
-
-  let { PrivateRoutes, PublicRoutes } = ProtectRoute();
+  let { PrivateRoutes } = ProtectRoute();
+  
   return (
     <div className="App font-sans flex h-screen flex-col mx-auto justify-center z-10 bg-tailwind bg-cover">
       <Router>
@@ -24,17 +25,14 @@ function App() {
         <div className="flex">
           <Sidebar />
           <Routes>
-            <Route  element={<PublicRoutes />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path='/*' exact element={<NotFound/>} />
 
-            <Route element={<PrivateRoutes />}>
-              <Route path="*" element={<NotFound />} />
+            {/* <Route element={<PrivateRoutes />}> */}
               <Route path="/" element={<Main />} />
               <Route path="/detail/id=:id" element={<TaskId />} />
-            </Route>
+            {/* </Route> */}
           </Routes>
         </div>
       </Router>

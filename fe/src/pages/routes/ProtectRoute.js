@@ -11,23 +11,19 @@ export default function ProtectRoute() {
   useEffect(() => {
     if (auth) {
       dispatch(reLoginAsync(id))
-      .unwrap()
-      .then(res => {
-        dispatch(name(res));
-    })
+        .unwrap()
+        .then(res => {
+          dispatch(name(res));
+        })
     }// eslint-disable-next-line
-  },[]); 
+  }, []);
 
 
   const PrivateRoutes = () => {
     return auth ? <Outlet /> : <Navigate to="/login" />;
   }
 
-  const PublicRoutes = () => {
-    return auth ? <Navigate to="/" /> : <Outlet />
-  }
-
-  return { PrivateRoutes, PublicRoutes }
+  return { PrivateRoutes }
 };
 
 

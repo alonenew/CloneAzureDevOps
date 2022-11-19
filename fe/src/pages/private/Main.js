@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Tab } from "@mui/material";
+import { Box, Tab, Typography } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import BoardDnD from "../../components/items/item//BoardDnD";
 import { useDispatch } from "react-redux";
@@ -36,35 +36,35 @@ export default function Main() {
   };
 
   return (
-    <div className='pl-3 relative grow min-h-[calc(100vh-48px)]'>
+    <Box className='pl-3 relative grow min-h-[calc(100vh-48px)]'>
       <TabContext value={value}>
-        <div className="flex flex-col h-full">
-          <div>
-            <div className="py-3 pl-2.5 flex items-center">
+        <Box className="flex flex-col h-full">
+          <Box>
+            <Box className="py-3 pl-2.5 flex items-center">
               <img src="https://www.svgrepo.com/show/379476/kanban-board.svg" width={22} alt="" />
-              <span className='ml-3 text-xl'>Miniproject Team</span>
-            </div>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <Typography variant='body1' ml={1} >Miniproject Team</Typography>
+            </Box>
+            <Box sx={{ borderBottom: 1, borderColor: "Boxider" }}>
               <TabList onChange={handleChange} style={{paddingLeft: 10 }}>
                 <Tab
                   style={{ minWidth: 40, padding: 0, marginRight: 15 }}
-                  label={<span className="text-sm normal-case font-bold font-sans">Board</span>} value="1" />
+                  label={<Typography variant='caption' className="normal-case font-bold font-sans">Board</Typography>} value="1" />
                 <Tab
                   style={{ minWidth: 50, padding: 0 }}
-                  label={<span className="text-sm normal-case font-bold font-sans">Analytics</span>} value="2" />
+                  label={<Typography variant='caption' className="normal-case font-bold font-sans">Analytics</Typography>} value="2" />
               </TabList>
             </Box>
-          </div>
-          <div className="grow">
+          </Box>
+          <Box className="grow">
             <TabPanel value="1" style={{ padding: "10px 20px 0px 0px" , height: "100%"}}>
               <BoardDnD />
             </TabPanel>
             <TabPanel value="2" >
               Item Two
             </TabPanel>
-          </div>
-        </div>
+          </Box>
+        </Box>
       </TabContext>
-    </div>
+    </Box>
   );
 }

@@ -1,13 +1,11 @@
 import React from 'react'
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Box,
-    Typography,
-    Button
-  } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import axios from 'axios';
 import { BASE_URL } from '../../../Const';
 
@@ -25,17 +23,17 @@ function ConfirmDeleteDiscus({ discusId, open, setOpen }) {
         <>
             <Dialog open={open} maxWidth="sm" fullWidth>
                 <DialogTitle sx={{fontSize: 20, fontWeight: "bold"}}>ยืนยันการลบข้อมูล</DialogTitle>
-                <Box position="absolute" top={0} right={0}>
-                    <img className="w-3 h-3 m-3 cursor-pointer" src="https://www.svgrepo.com/show/151290/close.svg" alt="" onClick={() => setOpen(false)} />
+                <Box position="absolute" top={0} right={0} padding={2}>
+                    <img className="icon-onclick" src="https://www.svgrepo.com/show/151290/close.svg" alt="" onClick={() => setOpen(false)} />
                 </Box>
                 <DialogContent>
                     <Typography>คุณกำลังลบข้อมูล ต้องการดำเนินการต่อหรือไม่</Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button sx={{background: "red"}} onClick={() => setOpen(false)}>
+                    <Button variant="contained" color="error" onClick={() => setOpen(false)}>
                         ยกเลิก
                     </Button>
-                    <Button sx={{background: "green"}} onClick={deleteDiscussion}>
+                    <Button variant="contained" color="success" onClick={deleteDiscussion}>
                         ยืนยัน
                     </Button>
                 </DialogActions>

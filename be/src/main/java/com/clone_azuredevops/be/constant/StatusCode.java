@@ -6,7 +6,7 @@ public class StatusCode {
     public static final String SUC_DESC_200 = "Success";
 
     public static final String ERR_CODE_400 = "400";
-    public static final String ERR_DESC_400 = "XXX";
+    public static final String ERR_DESC_400 = "Bad request";
 
     public static final String ERR_CODE_401 = "401";
     public static final String ERR_DESC_401 = "Unauthorized";

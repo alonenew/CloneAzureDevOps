@@ -9,5 +9,7 @@ import com.clone_azuredevops.be.entity.jpa.relation.Relation;
 
 @Repository
 public interface RelationRepository extends CrudRepository<Relation, Integer>{
-    List<Relation> findByTaskId(Integer taskId);
+    List<Relation> findAllByTaskId(Integer taskId);
+    Relation findByTaskId(Integer taskId);
+    Relation findByLinkTypeAndTaskLink(Integer linkType, Integer taskLink);
 }

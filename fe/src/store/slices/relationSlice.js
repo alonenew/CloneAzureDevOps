@@ -6,7 +6,7 @@ const initialState = {
   Relation: {
     Child: {
       linkType: "Child",
-      valueToLink: null
+      valueToLink: []
     },
     Parent: {
       linkType: "Parent",
@@ -14,8 +14,9 @@ const initialState = {
     },
     Duplicate: {
       linkType: "Duplicate",
-      valueToLink: null
-    }
+      valueToLink: []
+    },
+    relationShip: []
   },
 }
 
@@ -23,20 +24,23 @@ export const relationSlice = createSlice({
   name: 'relation',
   initialState,
   reducers: {
-    addChild: (state, actions) => {
-      state.Relation.Child.valueToLink = actions.payload;
-    },
     addParent: (state, actions) => {
       state.Relation.Parent.valueToLink = actions.payload;
     },
-    addDuplicate: (state, actions) => {
-      state.Relation.Duplicate.valueToLink = actions.payload;
+    addChild: (state, actions) => {
+      state.Relation.Child.valueToLink.push(actions.payload);
     },
-    clearRelation: (state , actions) => {
+    addDuplicate: (state, actions) => {
+      state.Relation.Duplicate.valueToLink.push(actions.payload);
+    },
+    addRelation: (state, actions) => {
+      state.Relation.relationShip.push(actions.payload);
+    },
+    clearRelation: (state) => {
       state.Relation = {
         Child: {
           linkType: "Child",
-          valueToLink: null
+          valueToLink: []
         },
         Parent: {
           linkType: "Parent",
@@ -44,8 +48,9 @@ export const relationSlice = createSlice({
         },
         Duplicate: {
           linkType: "Duplicate",
-          valueToLink: null
-        }
+          valueToLink: []
+        },
+        relationShip: []
       }
     }
   }
@@ -53,12 +58,14 @@ export const relationSlice = createSlice({
 
 export const addRelataion = (data) => async (dispatch) => {
   try {
-    
+    if (data.addRelate) {
+      dispatch(addRelation(data.addRelate))
+    }
     if (data.linkType === 1) {
       dispatch(addParent(data.valueToLink))
-    }else if (data.linkType === 2) {
+    } else if (data.linkType === 2) {
       dispatch(addChild(data.valueToLink))
-    }else{
+    } else {
       dispatch(addDuplicate(data.valueToLink))
     }
   } catch (err) {
@@ -67,6 +74,6 @@ export const addRelataion = (data) => async (dispatch) => {
 };
 
 export const selectRelation = (state) => state.relation.Relation
-export const { addChild, addParent , addDuplicate, clearRelation} = relationSlice.actions
+export const { addChild, addParent, addDuplicate, addRelation, clearRelation } = relationSlice.actions
 
 export default relationSlice.reducer

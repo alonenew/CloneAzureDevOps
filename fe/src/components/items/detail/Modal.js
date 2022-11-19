@@ -6,7 +6,7 @@ import Paper from "@mui/material/Paper";
 import Draggable from "react-draggable";
 import { Resizable } from "react-resizable";
 import axios from 'axios';
-import {  useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { BASE_URL } from '../../../Const';
 import { selectSearch } from '../../../store/slices/itemSlice';
 import "react-resizable/css/styles.css";
@@ -39,12 +39,11 @@ export default function Modal({ open, setOpen }) {
         setLoading(false)
       })// eslint-disable-next-line
   }, [taskId])
-console.log(item);
+
   return (
     <>
       <Dialog
         open={open}
-        // onClose={handleClose}
         PaperComponent={PaperComponent}
         aria-labelledby="draggable-dialog-title"
       >
@@ -61,7 +60,7 @@ console.log(item);
             <DialogContentText height={`${height}px`} width={`${width}px`} component='div' sx={{ position: "relative" }}>
               <DialogTitle style={{ cursor: "move", height: "15px", width: "100%", padding: 0, position: "absolute" }} id="draggable-dialog-title">
               </DialogTitle>
-              {!loading && 
+              {!loading &&
                 <DetailModal item={item} setOpen={setOpen} />
               }
             </DialogContentText>

@@ -1,9 +1,6 @@
 package com.clone_azuredevops.be.model.relation;
 
 import java.util.Date;
-import java.util.List;
-
-import com.clone_azuredevops.be.entity.jpa.discussion.Discussion;
 
 import lombok.Getter;
 import lombok.Setter;

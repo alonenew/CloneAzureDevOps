@@ -2,8 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { registerAsync } from "../../store/slices/authSlice";
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
+import { Box, Button, Input, InputLabel, Stack, Typography } from "@mui/material";
 
 export default function Register() {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function Register() {
                             navigate("/login")
                         })
                         .catch(() => {
-                            alert("สมัครสมาชิกไม่สำเร็จ");
+                            alert("Register failed");
                         });
                 }}
                 validationSchema={
@@ -49,86 +50,81 @@ export default function Register() {
                         handleReset
                     } = props;
                     return (
-                        <div className="rounded-xl w-fit h-fit bg-gradient-to-r p-0.5 from-[#6EE7B7] via-[#3B82F6] to-[#9333EA] mx-auto ">
-                            <form onSubmit={handleSubmit} className={`border bg-white p-5`}>
-                                <label htmlFor="email" className="block font-bold" >
-                                    อีเมล
-                                </label>
-                                <input
+                        <Box className="rounded-xl w-fit h-fit bg-gradient-to-r p-0.5 from-[#6EE7B7] via-[#3B82F6] to-[#9333EA] mx-auto ">
+                            <Form className={`border bg-white p-5`}>
+                                <InputLabel htmlFor="email"  >
+                                    Email
+                                </InputLabel>
+                                <Input
                                     id="email"
-                                    placeholder="อีเมล"
                                     type="text"
                                     value={values.email}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    className={`${errors.email && touched.email ? "text-input error" : "text-input"} w-80 h-10 rounded-xl px-3 border border-black`}
+                                    className={`${errors.email && touched.email ? "text-input error" : "text-input"} w-80 `}
                                 />
                                 {errors.email && touched.email && (
-                                    <div className="input-feedback text-red-600">{errors.email}</div>
+                                    <Box className="input-feedback text-red-600">{errors.email}</Box>
                                 )}
-                                <label htmlFor="password" className="block font-bold mt-5" >
-                                    รหัสผ่าน
-                                </label>
-                                <input
+                                <InputLabel htmlFor="password" className="mt-5" >
+                                    Password
+                                </InputLabel>
+                                <Input
                                     id="password"
-                                    placeholder="รหัสผ่าน"
                                     type="password"
                                     value={values.password}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    className={`${errors.password && touched.password ? "text-input error" : "text-input"} w-80 h-10 rounded-xl px-3 border border-black`}
+                                    className={`${errors.password && touched.password ? "text-input error" : "text-input"} w-80 `}
                                 />
                                 {errors.password && touched.password && (
-                                    <div className="input-feedback text-red-600">{errors.password}</div>
+                                    <Box className="input-feedback text-red-600">{errors.password}</Box>
                                 )}
-                                <label htmlFor="firstName" className="block font-bold mt-5" >
-                                    ชื่อ
-                                </label>
-                                <input
+                                <InputLabel htmlFor="firstName" className="mt-5" >
+                                    Firstname
+                                </InputLabel>
+                                <Input
                                     id="firstName"
-                                    placeholder="ชื่อ"
                                     type="text"
                                     value={values.firstName}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    className={`${errors.firstName && touched.firstName ? "text-input error" : "text-input"} w-80 h-10 rounded-xl px-3 border border-black`}
+                                    className={`${errors.firstName && touched.firstName ? "text-input error" : "text-input"} w-80 `}
                                 />
                                 {errors.firstName && touched.firstName && (
-                                    <div className="input-feedback text-red-600">{errors.firstName}</div>
+                                    <Box className="input-feedback text-red-600">{errors.firstName}</Box>
                                 )}
-                                <label htmlFor="lastName" className="block font-bold mt-5" >
-                                    นามสกุล
-                                </label>
-                                <input
+                                <InputLabel htmlFor="lastName" className="mt-5" >
+                                    Lastname
+                                </InputLabel>
+                                <Input
                                     id="lastName"
-                                    placeholder="นามสกุล"
                                     type="text"
                                     value={values.lastName}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    className={`${errors.lastName && touched.lastName ? "text-input error" : "text-input"} w-80 h-10 rounded-xl px-3 border border-black`}
+                                    className={`${errors.lastName && touched.lastName ? "text-input error" : "text-input"} w-80 `}
                                 />
                                 {errors.lastName && touched.lastName && (
-                                    <div className="input-feedback text-red-600">{errors.lastName}</div>
+                                    <Box className="input-feedback text-red-600">{errors.lastName}</Box>
                                 )}
-                                <div className="flex mx-auto my-5 justify-between">
-                                    <button
-                                        className=" bg-blue-300 p-1 rounded-xl w-36 text-black hover:text-white border border-blue-400"
+
+                                <Stack spacing={2} direction="row" my={2}>
+                                    <Button variant='contained' color="error" fullWidth
                                         type="button" onClick={handleReset} disabled={!dirty || isSubmitting}>
-                                        ล้าง
-                                    </button>
-                                    <button
-                                        className=" bg-blue-300 p-1 rounded-xl w-36 text-black hover:text-white border border-blue-400"
-                                        type="submit" disabled={isSubmitting}>
-                                        ยืนยัน
-                                    </button>
-                                </div>
-                                <div className="flex h-5 cursor-pointer underline-offset-4 " onClick={() => { navigate("/login") }}>
+                                        Clear
+                                    </Button>
+                                    <Button variant='contained' color="success" fullWidth
+                                        type="submit" disabled={isSubmitting} onClick={handleSubmit}>
+                                        Register
+                                    </Button>
+                                </Stack>
+                                <Box className="flex h-5 cursor-pointer underline" onClick={() => { navigate("/login") }}>
                                     <img src="https://www.svgrepo.com/show/286678/arrow-back.svg" alt="" />
-                                    <span className="px-3 ">เข้าสู่ระบบ</span>
-                                </div>
-                            </form>
-                        </div>
+                                    <Typography variant="body2" px={1}>Login</Typography>
+                                </Box>
+                            </Form>
+                        </Box>
                     );
                 }}
             </Formik>

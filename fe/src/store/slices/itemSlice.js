@@ -20,26 +20,65 @@ const initialState = {
     Closed: {
       name: "Closed",
       items: []
-    }
+    },
+    // Deploy: {
+    //   name: "Deploy",
+    //   items: []
+    // }
   },
   search: null
 }
 
 export const getTask = createAsyncThunk(
   "task/getTask",
-  async ( thunkAPI ) => {
+  async (thunkAPI) => {
     try {
       const id = localStorage.getItem("id");
-      const name = await axios.post(BASE_URL +'users/relogin?id='+id)
-      .then((res) => { return res.data.data; 
+      const name = await axios.post(BASE_URL + 'users/relogin?id=' + id)
+        .then((res) => {
+          return res.data.data;
         });
-      const response = await axios.get(BASE_URL +'tasks/gettask').then((res) => { return res.data; });
-      return {response , name};
+      const response = await axios.get(BASE_URL + 'tasks/gettask').then((res) => { return res.data; });
+      return { response, name };
     } catch (error) {
       return thunkAPI.rejectWithValue();
     }
   }
 );
+
+export const addTask = (data) => async (dispatch) => {
+  try {
+    axios.post(BASE_URL + 'tasks/addtask', data).then(response => {
+      dispatch(add({ name: response.data.data.name, taskId: response.data.data.taskId }));
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const updateTask = (data) => async (dispatch) => {
+  try {
+    axios.patch(BASE_URL + "tasks/update", data)
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const updateDiscus = (data) => async (dispatch) => {
+  try {
+
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const remove = (data) => async (dispatch) => {
+  try {
+    axios.delete(BASE_URL + "tasks/remove", data)
+  } catch (err) {
+    throw new Error(err);
+  }
+};
 
 export const itemSlice = createSlice({
   name: 'item',
@@ -60,7 +99,8 @@ export const itemSlice = createSlice({
     close: (state, action) => {
       state.stories.Closed.items.push(action.payload)
     },
-    openModal: (state, action) => { 
+    openModal: (state, action) => {
+      // state.open = action.payload
       state.search = action.payload
     },
     clear: (state) => {
@@ -91,5 +131,5 @@ export const itemSlice = createSlice({
 
 export const selectItemStories = (state) => state.selectItem.stories;
 export const selectSearch = (state) => state.selectItem.search;
-export const { add, update ,active,resolved,close ,openModal,clear} = itemSlice.actions
+export const { add, update, active, resolved, close, openModal, clear } = itemSlice.actions
 export default itemSlice.reducer

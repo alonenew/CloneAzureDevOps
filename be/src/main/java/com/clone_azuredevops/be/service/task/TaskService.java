@@ -2,21 +2,21 @@ package com.clone_azuredevops.be.service.task;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.validation.constraints.Null;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.clone_azuredevops.be.constant.StatusCode;
 import com.clone_azuredevops.be.entity.jpa.discussion.Discussion;
 import com.clone_azuredevops.be.entity.jpa.relation.Relation;
 import com.clone_azuredevops.be.entity.jpa.task.Task;
+import com.clone_azuredevops.be.exception.BaseException;
+import com.clone_azuredevops.be.model.task.AddDetailRequest;
 import com.clone_azuredevops.be.model.task.DiscussionRequest;
-import com.clone_azuredevops.be.model.task.DiscussionResponse;
 import com.clone_azuredevops.be.model.task.TaskRequest;
 import com.clone_azuredevops.be.model.task.TaskResponse;
 import com.clone_azuredevops.be.repository.jpa.DiscussionRepository;
@@ -38,7 +38,9 @@ public class TaskService {
     public TaskResponse addTask(TaskRequest taskRequest) {
         Task task = new Task();
         Date date = new Date();
-
+        if (taskRequest.getName().length()>50 || taskRequest.getName().isEmpty() || taskRequest.getCustomerId().isEmpty())  {
+            throw new BaseException(HttpStatus.BAD_REQUEST, StatusCode.ERR_CODE_400, StatusCode.ERR_DESC_400);
+        }
         task.setCustomerId(taskRequest.getCustomerId());
         task.setName(taskRequest.getName());
         task.setStatus("New");
@@ -62,31 +64,31 @@ public class TaskService {
         return taskResponse;
     }
 
-    public TaskResponse addDetail(TaskRequest taskRequest) {
-        Task task = taskRepository.findByTaskId(taskRequest.getTaskId());
+    public TaskResponse addDetail(AddDetailRequest addDetailRequest) {
+        Task task = taskRepository.findByTaskId(addDetailRequest.getTaskId());
         Discussion discussion = new Discussion();
         UUID uuid = UUID.randomUUID();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
-        task.setName(taskRequest.getName());
-        task.setStatus(taskRequest.getStatus());
-        task.setDescription(taskRequest.getDescription());
-        task.setAcceptance(taskRequest.getAcceptance());
-        task.setStoryPoint(taskRequest.getStoryPoint());
-        task.setAssign(taskRequest.getAssign());
-        task.setPriority(taskRequest.getPriority());
-        task.setRisk(taskRequest.getRisk());
-        task.setArea(taskRequest.getArea());
-        task.setUpdateBy(taskRequest.getCustomerId());
+        task.setName(addDetailRequest.getName());
+        task.setStatus(addDetailRequest.getStatus());
+        task.setDescription(addDetailRequest.getDescription());
+        task.setAcceptance(addDetailRequest.getAcceptance());
+        task.setStoryPoint(addDetailRequest.getStoryPoint());
+        task.setAssign(addDetailRequest.getAssign());
+        task.setPriority(addDetailRequest.getPriority());
+        task.setRisk(addDetailRequest.getRisk());
+        task.setArea(addDetailRequest.getArea());
+        task.setUpdateBy(addDetailRequest.getCustomerId());
         task.setUpdateDate(date);
 
-        if (taskRequest.getDiscussion() != null && !taskRequest.getDiscussion().isEmpty()) {
+        if (addDetailRequest.getDiscussion() != null && !addDetailRequest.getDiscussion().isEmpty()) {
             discussion.setDiscusId(dateFormat.format(date) + uuid.toString());
-            discussion.setCustomerId(taskRequest.getCustomerId());
+            discussion.setCustomerId(addDetailRequest.getCustomerId());
             discussion.setTaskId(task.getTaskId());
-            discussion.setComment(taskRequest.getDiscussion());
-            discussion.setCreatedBy(taskRequest.getCreatedBy());
-            discussion.setUpdateBy(taskRequest.getCustomerId());
+            discussion.setComment(addDetailRequest.getDiscussion());
+            discussion.setCreatedBy(addDetailRequest.getCreatedBy());
+            discussion.setUpdateBy(addDetailRequest.getCustomerId());
             discussion.setCreatedDate(date);
             discussion.setUpdateDate(date);
             discussionRepository.save(discussion);
@@ -137,19 +139,20 @@ public class TaskService {
         taskResponse.setCreatedDate(task.getCreatedDate());
         taskResponse.setUpdateDate(task.getUpdateDate());
         List<Discussion> discussionList = discussionRepository.findByTaskIdOrderByCreatedDateDesc(task.getTaskId());
-        List<Relation> relationList = relationRepository.findByTaskId(task.getTaskId());
+        List<Relation> relationList = relationRepository.findAllByTaskId(task.getTaskId());
         taskResponse.setDiscussion(discussionList);   
         taskResponse.setRelations(relationList);   
         return taskResponse;
     }
     
-    public TaskResponse updateAssign(TaskRequest taskRequest) {
+    public TaskResponse updateAssign(AddDetailRequest taskRequest) {
         Task task = taskRepository.findByTaskId(taskRequest.getTaskId());
         Date date = new Date();
         task.setAssign(taskRequest.getAssign());
         task.setUpdateBy(taskRequest.getCustomerId());
         task.setUpdateDate(date);
         taskRepository.save(task);
+
         TaskResponse  taskResponse = new TaskResponse();
         taskResponse.setTaskId(task.getTaskId());
         taskResponse.setCustomerId(task.getCustomerId());
@@ -173,39 +176,50 @@ public class TaskService {
         return taskResponse;
     }
 
-    public void remove(TaskRequest taskRequest){
+    public Boolean remove(TaskRequest taskRequest){
         Task task = taskRepository.findByTaskId(taskRequest.getTaskId());
-        taskRepository.delete(task);
+        if(task != null){
+            taskRepository.delete(task);
+            return true;
+        }else{
+            return false;
+        }
     }
 
-    public TaskResponse update(TaskRequest taskRequest) {
+    public TaskResponse update(AddDetailRequest taskRequest) {
         Task task = taskRepository.findByTaskId(taskRequest.getTaskId());
         Date date = new Date();
-        task.setCustomerId(taskRequest.getCustomerId());
-        task.setStatus(taskRequest.getStatus());
-        task.setUpdateBy(taskRequest.getCustomerId());
-        task.setUpdateDate(date);
-        taskRepository.save(task);
-
         TaskResponse taskResponse = new TaskResponse();
-        taskResponse.setTaskId(task.getTaskId());
-        taskResponse.setCustomerId(task.getCustomerId());
-        taskResponse.setName(task.getName());
-        taskResponse.setStatus(task.getStatus());
-        taskResponse.setCreatedBy(task.getCreatedBy());
-        taskResponse.setUpdateBy(task.getUpdateBy());
-        taskResponse.setCreatedDate(task.getCreatedDate());
-        taskResponse.setUpdateDate(task.getUpdateDate());
+        if (!taskRequest.getStatus().equals(task.getStatus())) {
+            task.setCustomerId(taskRequest.getCustomerId());
+            task.setStatus(taskRequest.getStatus());
+            task.setUpdateBy(taskRequest.getCustomerId());
+            task.setUpdateDate(date);
+            taskRepository.save(task);
+
+            taskResponse.setTaskId(task.getTaskId());
+            taskResponse.setCustomerId(task.getCustomerId());
+            taskResponse.setName(task.getName());
+            taskResponse.setStatus(task.getStatus());
+            taskResponse.setCreatedBy(task.getCreatedBy());
+            taskResponse.setUpdateBy(task.getUpdateBy());
+            taskResponse.setCreatedDate(task.getCreatedDate());
+            taskResponse.setUpdateDate(task.getUpdateDate());
+        }
         return taskResponse;
     }
 
-    public Discussion removeDiscusById(DiscussionRequest discussionRequest) {
+    public Boolean removeDiscusById(DiscussionRequest discussionRequest) {
         Discussion delete = discussionRepository.findByDiscusId(discussionRequest.getDiscusId());
-        discussionRepository.delete(delete);
-        return delete;
+        if(delete != null) {
+            discussionRepository.delete(delete);
+            return true;
+        }else{
+            return false;
+        }
     }
 
-    public List<Discussion> getDiscus(TaskRequest taskRequest) {
+    public List<Discussion> getDiscus(AddDetailRequest taskRequest) {
         List<Discussion> discussionList = discussionRepository.findByTaskIdOrderByCreatedDateDesc(taskRequest.getTaskId());
         return discussionList;
     }

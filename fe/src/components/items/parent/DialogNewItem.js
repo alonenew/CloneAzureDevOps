@@ -36,10 +36,10 @@ function DialogNewItem({ open, setOpen }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={() => setOpen(false)}>
+          <Button variant="contained" color="success" autoFocus onClick={() => setOpen(false)}>
             Ok
           </Button>
-          <Button onClick={() => setOpen(false)}>
+          <Button variant="contained" color="error" onClick={() => setOpen(false)}>
             Cancel
           </Button>
         </DialogActions>

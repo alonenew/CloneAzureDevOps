@@ -31,7 +31,7 @@ function stringAvatar(data) {
 
 export default function AvatarName({name}) {
     return  (
-        <Avatar  {...stringAvatar(name)} />
+        <Avatar {...stringAvatar(name)} />
       )
      
 }

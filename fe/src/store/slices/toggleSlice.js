@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  openLogoHeader: false,
+  openLogoHeader: true,
   openNewStories: true,
   openClosedStories: true,
 }
@@ -25,6 +25,6 @@ export const toggleSlice = createSlice({
 export const selectOpenLogo = (state) => state.toggle.openLogoHeader
 export const selectOpenNew = (state) => state.toggle.openNewStories
 export const selectOpenClosed = (state) => state.toggle.openClosedStories
-export const { toggleLogo,toggleNewStories, toggleClosedStories } = toggleSlice.actions
+export const { toggleLogo, toggleNewStories, toggleClosedStories } = toggleSlice.actions
 
 export default toggleSlice.reducer

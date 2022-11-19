@@ -1,11 +1,12 @@
+import { Box } from '@mui/material'
 import React from 'react'
 import DetailModal from '../../components/items/detail/DetailModal'
 
 function TaskId() {
   return (
-    <div className='w-full bg-white'>
+    <Box className='w-full bg-white'>
         <DetailModal />
-    </div>
+    </Box>
   )
 }
 

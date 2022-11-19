@@ -11,9 +11,9 @@ const initialState = {
 
 export const registerAsync = createAsyncThunk(
   "auth/register",
-  async ( data , thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const response = await axios.post(BASE_URL +'users/register', data);
+      const response = await axios.post(BASE_URL + 'users/register', data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue();
@@ -23,9 +23,9 @@ export const registerAsync = createAsyncThunk(
 
 export const loginAsync = createAsyncThunk(
   "auth/login",
-  async ( data , thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const response = await axios.post(BASE_URL +'users/login', data)
+      const response = await axios.post(BASE_URL + 'users/login', data)
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue();
@@ -35,9 +35,9 @@ export const loginAsync = createAsyncThunk(
 
 export const reLoginAsync = createAsyncThunk(
   "auth/relogin",
-  async ( data , thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const response = await axios.post(BASE_URL +'users/relogin?id='+ data)
+      const response = await axios.post(BASE_URL + 'users/relogin?id=' + data)
       return response.data.data.name;
     } catch (error) {
       return thunkAPI.rejectWithValue();
@@ -67,6 +67,6 @@ export const authSlice = createSlice({
 
 export const selectName = (state) => state.auth.name
 export const selectToken = (state) => state.auth.token
-export const { login , logoutUser , name} = authSlice.actions
+export const { login, logoutUser, name } = authSlice.actions
 
 export default authSlice.reducer

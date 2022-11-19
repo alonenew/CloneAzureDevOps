@@ -19,27 +19,24 @@ function Related({ item }) {
     dayjs.extend(buddhistEra)
     const dispatch = useDispatch();
     const [items, setItems] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
     const [openRelated, setOpenRelated] = useState(true);
     const [openExisting, setOpenExisting] = useState(false);
     const [openNewItem, setOpenNewItem] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    
 
     useEffect(() => {
-        axios.get(BASE_URL + 'tasks/gettask').then((res) => {
-            setItems(res.data.filter(list => list.taskId !== item.taskId));
-        });
-        dispatch(clearRelation());
-        item = item.relations.map((listRelation) => {
-            dispatch(addRelataion({
-                taskId: listRelation.taskId, linkType: listRelation.linkType, valueToLink: listRelation.taskLink
-            }))
-        setIsLoading(false);
-        })
-
-            
+        if (item) {
+            axios.get(BASE_URL + 'tasks/gettask').then((res) => {
+                setItems(res.data.filter(list => list.taskId !== item.taskId));
+                dispatch(clearRelation());
+                item.relations.map((listRelation) => {
+                    return dispatch(addRelataion({
+                        taskId: listRelation.taskId, linkType: listRelation.linkType, valueToLink: listRelation
+                    }))
+                })
+            });
+        }// eslint-disable-next-line
     }, [])
 
     const handleExisting = () => {
@@ -53,19 +50,19 @@ function Related({ item }) {
     }
     return (
         <>
-            <div className="hover:text-blue-900 hover:border-blue-200 border-b-2 pb-1 mt-2" onClick={() => setOpenRelated(!openRelated)}>
-                <h4>Related Work</h4>
-            </div>
+            <Box className="hover:text-blue-900 hover:border-blue-200 border-b-2 pb-1 mt-2" onClick={() => setOpenRelated(!openRelated)}>
+                <Typography variant="body1">Related Work</Typography>
+            </Box>
             {openRelated ?
                 <>
-                    <Box>
+                    <Box sx={{fontSize: 14}}>
                         <Button
                             id="basic-button"
                             aria-controls={open ? 'basic-menu' : undefined}
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
                             onClick={(event) => setAnchorEl(event.currentTarget)}
-                            sx={{ fontSize: 14, textTransform: 'none' }}
+                            sx={{textTransform: 'none' }}
                         >
                             <img src="https://www.svgrepo.com/show/4797/plus.svg" alt="" className='w-3 h-3 mr-1 pb-0.5' /> Add link
                         </Button>
@@ -88,9 +85,9 @@ function Related({ item }) {
                         </Typography>
                     </Box>
 
-                    {!isLoading ? <ItemRelate items={items} /> : null}
+                    <ItemRelate items={items} />
                                 
-                    <DialogExiting item={item} items={items}  open={openExisting} setOpen={setOpenExisting} />
+                    <DialogExiting item={item} items={items} open={openExisting} setOpen={setOpenExisting} />
                     <DialogNewItem item={item} items={items} open={openNewItem} setOpen={setOpenNewItem} />
                 </>
                 : null

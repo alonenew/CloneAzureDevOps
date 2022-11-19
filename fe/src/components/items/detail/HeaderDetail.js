@@ -4,12 +4,16 @@ import { ACTIVE, BASE_URL, CLOSED, NEW, REMOVED, RESOLVED } from '../../../Const
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearRelation } from '../../../store/slices/relationSlice';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 function HeaderDetail({ item, setOpen, setStatus, assign, setAssign, submit , name, setName}) {
     const [listUser, setListUser] = useState();
+
     const dispatch = useDispatch();
     let location = useLocation();
-
+    console.log(".................................");
+    console.log(item);
     useEffect(() => {
         axios.get(BASE_URL + 'users/customerall').then(response => {
             setListUser(response.data);
@@ -23,55 +27,65 @@ function HeaderDetail({ item, setOpen, setStatus, assign, setAssign, submit , na
 
     return (
         <>
-            <div className="border-l-8 p-2 border-blue-500 text-black">
-                <div className="flex items-center justify-between">
-                    <span className="cursor-pointer text-sm hover:underline flex uppercase"><img src="https://www.svgrepo.com/show/53135/book.svg" className="w-4 h-4 mr-2" alt="" /> {item.type}</span>
-                    {location.pathname === '/' ? <img className="w-3 h-3 cursor-pointer" src="https://www.svgrepo.com/show/151290/close.svg" alt="" onClick={handleClose} /> : null}
-                </div>
-                <div className="flex items-center justify-between w-1/2">
-                    <span className='mr-1 font-bold'>{1}</span>
+            <Box className="border-l-8 p-2 border-blue-500 text-black">
+                <Box className="flex items-center justify-between">
+                    <Typography variant='caption' className="cursor-pointer text-sm hover:underline flex uppercase">
+                        <img src="https://www.svgrepo.com/show/53135/book.svg" 
+                        className="w-4 h-4 mr-2" alt="" /> {item.type}
+                    </Typography>
+                    {location.pathname === '/' 
+                    ? <img className="icon-onclick" src="https://www.svgrepo.com/show/151290/close.svg" alt="" onClick={handleClose} /> 
+                    : null}
+                </Box>
+                <Box className="flex items-center justify-between w-1/2">
+                    <Typography variant='body2' className='mr-1 font-bold'>{item.taskId}</Typography>
                     <input className="my-2 w-full ml-1 box-border hover:outline focus:outline outline-1 outline-cyan-500 p-1 text-black text-sm" onChange={(e) => setName(e.target.value)} defaultValue={name} />
-                </div>
-                <div className="flex items-center justify-between">
-                    <div className='flex items-center relative mt-2 w-1/4'>
+                </Box>
+                <Box className="flex items-center justify-between">
+                    <Box className='flex items-center relative mt-2 w-1/4'>
                         <img src='https://www.svgrepo.com/show/165196/user.svg' alt='' className={`z-0 absolute w-5 h-5`} />
                         <select className='overflow-visible focus:z-10 focus:pl-1 w-full pl-6
                         hover:outline focus:outline outline-1 outline-cyan-500 py-0.5 text-black 
-                        text-sm appearance-none' value={assign ? assign : ''} onChange={(e) => setAssign(e.target.value)} >
+                        text-sm appearance-none' 
+                        data-testid="select-test"
+                        value={assign ? assign : ''} 
+                        onChange={(e) => setAssign(e.target.value)} 
+                        >
                             <option value=''>Unassisned</option>
                             {listUser ? listUser.map((user, index) =>
                                 <option key={index} value={user.customerId}> {user.firstName + " " + user.lastName} </option>
                             ) : null}
                         </select>
-                    </div>
-                    <div className='flex items-center mr-5 text-sm' >
-                        <div className='flex items-center bg-blue-500 px-3 py-1 text-white text-sm cursor-pointer' onClick={submit}>
+                    </Box>
+                    <Box className='flex items-center mr-5 text-sm' >
+                        <Box className='btn-detail text-white bg-blue-500' onClick={submit}>
                             <img src="https://www.svgrepo.com/show/262898/diskette-save.svg" className='w-4 h-4 mr-2' alt="" />
                             Save & Close
-                        </div>
-                        <div className='flex items-center bg-gray-200 px-3 py-1 text-sm cursor-pointer ml-1 border-r-2 border-gray-500'>
+                        </Box>
+                        <Box className='btn-detail bg-gray-200 ml-1 border-r-2 border-gray-500'>
                             Follow
-                        </div>
-                        <div className='flex items-center bg-gray-200 py-1.5 text-sm cursor-pointer px-1'>
+                        </Box>
+                        <Box className='flex items-center bg-gray-200 py-1.5 text-sm cursor-pointer px-1'>
                             <img src="https://www.svgrepo.com/show/417962/setting.svg" className='w-4 h-4' alt="" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
 
-            <div className="bg-gray-100 h-24 py-4" >
-                <div className="flex  item-center px-4 pb-3">
-                    <div className='flex items-center justify-between mr-3'>
-                        <span className='text-xs mr-10'> State </span>
-                        <div className='flex items-center relative box-border w-56 ml-0.5'>
-                            {item.status === NEW ? <div className={`w-3 h-3 rounded-full bg-slate-400`}></div> : ''}
-                            {item.status === ACTIVE ? <div className={`w-3 h-3 rounded-full bg-blue-600`}></div> : ''}
-                            {item.status === RESOLVED ? <div className={`w-3 h-3 rounded-full bg-blue-600`}></div> : ''}
-                            {item.status === CLOSED ? <div className={`w-3 h-3 rounded-full bg-green-600`}></div> : ''}
-                            {item.status === REMOVED ? <div className={`w-3 h-3 rounded-full bg-slate-400`}></div> : ''}
+            <Box className="bg-gray-100 h-24 py-4" >
+                <Box className="flex  item-center px-4 pb-3">
+                    <Box className='flex items-center justify-between mr-2'>
+                        <Typography variant='caption' pr={4}> State </Typography>
+                        <Box className='flex items-center relative box-border w-56 ml-1'>
+                            {item.status === NEW ? <Box className={`circle-status bg-slate-400`}></Box> : ''}
+                            {item.status === ACTIVE ? <Box className={`circle-status bg-blue-600`}></Box> : ''}
+                            {item.status === RESOLVED ? <Box className={`circle-status bg-blue-600`}></Box> : ''}
+                            {item.status === CLOSED ? <Box className={`circle-status bg-green-600`}></Box> : ''}
+                            {item.status === REMOVED ? <Box className={`circle-status bg-slate-400`}></Box> : ''}
                             <select onChange={(e) => setStatus(e.target.value)}
-                                className='bg-gray-100 ml-1 box-border hover:outline focus:outline outline-1 outline-cyan-500 px-1 text-black w-full text-sm appearance-none'
-                                defaultValue={item.status}>
+                                className='select-status ml-1 px-1 w-full'
+                                defaultValue={item.status}
+                                size='small' data-testid="select">
                                 <option value={null} hidden></option>
                                 <option value={NEW}>      {NEW}      </option>
                                 <option value={ACTIVE}>   {ACTIVE}   </option>
@@ -79,39 +93,39 @@ function HeaderDetail({ item, setOpen, setStatus, assign, setAssign, submit , na
                                 <option value={CLOSED}>   {CLOSED}   </option>
                                 <option value={REMOVED}>  {REMOVED}  </option>
                             </select>
-                        </div>
-                    </div>
-                    <div className="flex items-center w-full">
-                        <span className='text-xs w-20'><u>A</u>rea</span>
-                        <select className='bg-gray-100 box-border hover:outline focus:outline outline-1 outline-cyan-500  text-black w-80 text-sm appearance-none' defaultValue="MiniProject">
+                        </Box>
+                    </Box>
+                    <Box className="flex items-center w-full">
+                        <Typography variant='caption' className='w-20'><u>A</u>rea</Typography>
+                        <select className='select-status' defaultValue="MiniProject">
                             <option value={null} hidden></option>
                             <option value="MiniProject">MiniProject</option>
                             <option value="MiniProject222">MiniProject222</option>
                         </select>
-                    </div>
-                </div>
-                <div className="flex item-center  px-4">
-                    <div className='flex items-center justify-between mr-3'>
-                        <span className='text-xs pt-1 mr-7'> Reason </span>
-                        <div className='flex items-center relative box-border w-56 mr-0.5'>
+                    </Box>
+                </Box>
+                <Box className="flex item-center px-4">
+                    <Box className='flex items-center justify-between mr-3'>
+                        <Typography variant='caption' pr={2}> Reason </Typography>
+                        <Box className='flex items-center relative box-border w-56 mr-0.5'>
                             {item.status === NEW && <img src="https://www.svgrepo.com/show/14475/lock.svg" className="w-3.5" alt="" />}
                             {item.status === NEW && <span className="text-sm pt-1 pl-2">New</span>}
-                            {item.status === ACTIVE && <span className="text-sm pt-1 pl-2 truncate">Implementation started</span>}
-                            {item.status === RESOLVED && <span className="text-sm pt-1 pl-2 truncate">Code complete and unit tests pass</span>}
-                            {item.status === CLOSED && <span className="text-sm pt-1 pl-2 truncate">Acceptance tests pass</span>}
-                            {item.status === REMOVED && <span className="text-sm pt-1 pl-2 truncate">Removed from the backlog</span>}
-                        </div>
-                    </div>
-                    <div className="flex items-center w-full">
-                        <span className='text-xs w-20'>Ite<u>r</u>ation</span>
-                        <select className='bg-gray-100 box-border hover:outline focus:outline outline-1 outline-cyan-500 text-black w-80 text-sm appearance-none' defaultValue="Iteration1">
+                            {item.status === ACTIVE && <span className="text-status">Implementation started</span>}
+                            {item.status === RESOLVED && <span className="text-status">Code complete and unit tests pass</span>}
+                            {item.status === CLOSED && <span className="text-status">Acceptance tests pass</span>}
+                            {item.status === REMOVED && <span className="text-status">Removed from the backlog</span>}
+                        </Box>
+                    </Box>
+                    <Box className="flex items-center w-full">
+                        <Typography variant='caption' className='w-20'>Ite<u>r</u>ation</Typography>
+                        <select className='select-status w-80' defaultValue="Iteration1">
                             <option value='' hidden></option>
                             <option value="Iteration1">      Miniproject\Iteration 1      </option>
                             <option value="MiniProject">      MiniProject      </option>
                         </select>
-                    </div>
-                </div>
-            </div>
+                    </Box>
+                </Box>
+            </Box>
         </>
     )
 }

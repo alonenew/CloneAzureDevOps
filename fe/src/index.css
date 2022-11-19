@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer components {
+  .icon-onclick {
+    @apply w-3 h-3 cursor-pointer;
+  }
+  
+  .input-detail {
+    @apply box-border hover:outline focus:outline outline-1 outline-cyan-500 px-1 text-black w-full text-sm
+  }
+
+  .select-status {
+    @apply bg-gray-100 box-border hover:outline focus:outline outline-1 outline-cyan-500  text-black text-sm appearance-none;
+  }
+
+  .box-status-home {
+    @apply z-0 absolute left-2 font-bold w-2 h-2 rounded-full;
+  }
+  .select-status-home {
+    @apply overflow-hidden focus:z-10 pl-6 focus:pl-1 w-full focus:outline-none select-status bg-white;
+  }
+
+  .text-status {
+    @apply text-sm pt-1 pl-2 truncate;
+  }
+
+  .circle-status {
+    @apply w-3 h-3 rounded-full;
+  }
+
+  .header-details {
+    @apply hover:text-blue-900 hover:border-blue-200 border-b-2 pb-1 my-2;
+  }
+
+  .newitem-textbox {
+    @apply  text-xs border w-full focus:outline-none resize-none overflow-hidden h-full;
+  }
+
+  .area-textbox {
+    @apply text-sm border w-full mt-2 p-1 focus:outline-none focus:border-blue-500 resize-none overflow-hidden;
+  }
+
+  .details-deployment {
+    @apply text-xs p-2 bg-gray-100 mt-2 flex items-center;
+  }
+
+  .img-deployment {
+    @apply w-8 h-8 mr-2;
+  }
+
+  .btn-detail {
+    @apply flex items-center px-3 py-1 text-sm cursor-pointer; 
+  }
+
+}

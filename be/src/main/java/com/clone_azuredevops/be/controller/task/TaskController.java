@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clone_azuredevops.be.entity.jpa.discussion.Discussion;
 import com.clone_azuredevops.be.entity.jpa.task.Task;
 import com.clone_azuredevops.be.model.common.SuccessResponse;
+import com.clone_azuredevops.be.model.task.AddDetailRequest;
 import com.clone_azuredevops.be.model.task.DiscussionRequest;
 import com.clone_azuredevops.be.model.task.TaskRequest;
 import com.clone_azuredevops.be.model.task.TaskResponse;
-import com.clone_azuredevops.be.model.user.CustomerRegisterRequest;
 import com.clone_azuredevops.be.repository.jpa.TaskRepository;
 import com.clone_azuredevops.be.service.task.TaskService;
 
@@ -40,8 +40,8 @@ public class TaskController {
         return ResponseEntity.ok(new SuccessResponse<TaskResponse>(taskService.addTask(taskRequest)));
     }
     @PatchMapping("/adddetail")        
-    public ResponseEntity<SuccessResponse <TaskResponse>> addDetail(@RequestBody TaskRequest taskRequest) {
-        return ResponseEntity.ok(new SuccessResponse<TaskResponse>(taskService.addDetail(taskRequest)));
+    public ResponseEntity<SuccessResponse <TaskResponse>> addDetail(@RequestBody AddDetailRequest addDetailRequest) {
+        return ResponseEntity.ok(new SuccessResponse<TaskResponse>(taskService.addDetail(addDetailRequest)));
     }
 
     @GetMapping("/gettask")
@@ -50,7 +50,7 @@ public class TaskController {
 	}
 
     @DeleteMapping("/deleteDiscusById")
-    public Discussion deleteDiscusById(@RequestBody DiscussionRequest discussionRequest) {
+    public Boolean deleteDiscusById(@RequestBody DiscussionRequest discussionRequest) {
         return taskService.removeDiscusById(discussionRequest);
     }
 
@@ -58,13 +58,14 @@ public class TaskController {
     public Discussion updateDiscusById(@RequestBody DiscussionRequest discussionRequest) {
         return taskService.updateDiscusById(discussionRequest);
     }
+    
     @PatchMapping("/updateAssign")
-    public TaskResponse updateAssign(@RequestBody TaskRequest taskRequest) {
+    public TaskResponse updateAssign(@RequestBody AddDetailRequest taskRequest) {
         return taskService.updateAssign(taskRequest);
     }
     
     @PostMapping("/getDiscus")
-    public List<Discussion> getDiscus(@RequestBody TaskRequest taskRequest) {
+    public List<Discussion> getDiscus(@RequestBody AddDetailRequest taskRequest) {
         return taskService.getDiscus(taskRequest);
     }
 
@@ -74,14 +75,13 @@ public class TaskController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<SuccessResponse <TaskResponse>> update(@RequestBody TaskRequest taskRequest) {
+    public ResponseEntity<SuccessResponse <TaskResponse>> update(@RequestBody AddDetailRequest taskRequest) {
         return ResponseEntity.ok(new SuccessResponse<TaskResponse>(taskService.update(taskRequest)));
     }
 
     @DeleteMapping("/remove")
-    public ResponseEntity<SuccessResponse<String>> remove(@RequestBody TaskRequest taskRequest) {
-        taskService.remove(taskRequest);
-      return ResponseEntity.ok(new SuccessResponse<String>());
+    public Boolean remove(@RequestBody TaskRequest taskRequest) {
+      return taskService.remove(taskRequest);
     }
 
 

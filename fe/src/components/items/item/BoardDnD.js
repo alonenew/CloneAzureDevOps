@@ -6,6 +6,7 @@ import ColumnData from './ColumnData';
 import AddItem from "./AddItem";
 import ItemDnD from "./ItemDnD";
 import { selectOpenClosed, selectOpenNew } from "../../../store/slices/toggleSlice";
+import Box from '@mui/material/Box';
 
 function BoardDnD() {
     const openNew = useSelector(selectOpenNew);
@@ -15,20 +16,22 @@ function BoardDnD() {
     
     return (
         <>
-            <div className="flex gap-x-1 text-sm h-full">
+            <Box className="flex gap-x-1 text-sm h-full">
                 <DragDropContext
                     onDragEnd={result => dragAndDrop(result, columns, setColumns)}
                 >
                     {Object.entries(columns).map(([columnId, column], index) => {
                         return (
-                            <div key={columnId} className={`flex flex-col max-w-xss w-full ${!openNew && (column.name === "New") && "w-10"} ${!openClosed && (column.name === "Closed") && "w-10"}`} >
-                                <div className='flex justify-between items-center px-1.5 relative'>
+                            <Box key={columnId} className={`flex flex-col max-w-xss w-full 
+                            ${!openNew && (column.name === "New") && "w-10"} 
+                            ${!openClosed && (column.name === "Closed") && "w-10"}`} >
+                                <Box className='flex justify-between items-center px-1.5 relative'>
                                     <Col openNew={openNew} openClosed={openClosed} name={column.name} />
-                                </div>
+                                </Box>
                                 <Droppable droppableId={columnId} key={columnId}>
                                     {(provided, snapshot) => {
                                         return (
-                                            <div
+                                            <Box
                                                 {...provided.droppableProps}
                                                 ref={provided.innerRef}
                                                 style={{
@@ -36,12 +39,13 @@ function BoardDnD() {
                                                       ? "rgb(209 213 219)"
                                                       : "rgb(243 244 246)",
                                                   }}
-                                                className={`flex-row border w-full h-full ${column.name === "New" ? "p-3" : "px-3"} border-t-2 border-gray-300`}
+                                                className={`flex-row border w-full h-full 
+                                                ${column.name === "New" ? "p-3" : "px-3"} border-t-2 border-gray-300`}
                                             >
                                                 {openNew &&
-                                                    <div>
+                                                    <Box>
                                                         {column.name === "New" && <AddItem />}
-                                                    </div>
+                                                    </Box>
                                                 }
                                                 {column.items.map((item, index) => {
                                                     return (
@@ -52,7 +56,7 @@ function BoardDnD() {
                                                         >
                                                             {(provided, snapshot) => {
                                                                 return (
-                                                                    <div
+                                                                    <Box
                                                                         ref={provided.innerRef}
                                                                         {...provided.draggableProps}
                                                                         {...provided.dragHandleProps}
@@ -62,23 +66,25 @@ function BoardDnD() {
                                                                         
                                                                         }}
                                                                     >
-                                                                        <ItemDnD col={columns} item={item} index={index} name={column.name} openN={openNew} openC={openClosed}/>
-                                                                    </div>
+                                                                        <ItemDnD col={columns} item={item} 
+                                                                        index={index} name={column.name} openN={openNew} 
+                                                                        openC={openClosed}/>
+                                                                    </Box>
                                                                 );
                                                             }}
                                                         </Draggable>
                                                     );
                                                 })}
                                                 {provided.placeholder}
-                                            </div>
+                                            </Box>
                                         );
                                     }}
                                 </Droppable>
-                            </div>
+                            </Box>
                         );
                     })}
                 </DragDropContext>
-            </div>
+            </Box>
         </>
     );
 }
