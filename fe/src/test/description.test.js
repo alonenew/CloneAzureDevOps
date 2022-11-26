@@ -131,5 +131,5 @@ test("Test select", async () => {
 
   
   expect(await screen.queryByTestId('select-test')).toBeInTheDocument();
-  await screen.debug();
+  screen.debug();
 });

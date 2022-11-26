@@ -40,21 +40,7 @@ function Discussion({ taskId, setDiscussion }) {
       setLoading(false);
 
   }, [alertDelete])
-  console.log(discus);
-  // if(discus.length<1){
-  //   return setDiscus([
-  //     {
-  //       "discusId": "202211147fc59e74-3524-4bfe-aa12-85387a8dbd32",
-  //       "customerId": "2022110721603436-942c-4d75-bfed-9d553ae83ab3",
-  //       "taskId": 1,
-  //       "comment": "Old Comment",
-  //       "createdDate": "2022-11-14T06:02:35.000+00:00",
-  //       "createdBy": "Sittichai Thammawat",
-  //       "updateDate": "2022-11-14T06:02:35.000+00:00",
-  //       "updateBy": "2022110721603436-942c-4d75-bfed-9d553ae83ab3"
-  //     }
-  //   ]);
-  // }
+
   return (
     <> {loading ?
       <Typography variant="body2"></Typography>

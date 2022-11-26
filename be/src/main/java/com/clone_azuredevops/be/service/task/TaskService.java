@@ -70,6 +70,7 @@ public class TaskService {
         UUID uuid = UUID.randomUUID();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
+        TaskResponse taskResponse = new TaskResponse();
         task.setName(addDetailRequest.getName());
         task.setStatus(addDetailRequest.getStatus());
         task.setDescription(addDetailRequest.getDescription());
@@ -96,7 +97,7 @@ public class TaskService {
 
         taskRepository.save(task);
         
-        TaskResponse taskResponse = new TaskResponse();
+        
         taskResponse.setTaskId(task.getTaskId());
         taskResponse.setCustomerId(task.getCustomerId());
         taskResponse.setName(task.getName());
@@ -112,6 +113,9 @@ public class TaskService {
         taskResponse.setUpdateBy(task.getUpdateBy());
         taskResponse.setCreatedDate(task.getCreatedDate());
         taskResponse.setUpdateDate(task.getUpdateDate());
+        List<Discussion> discussionList = discussionRepository.findByTaskId(task.getTaskId());
+        taskResponse.setDiscussion(discussionRepository.findByTaskId(task.getTaskId()));
+
         return taskResponse;
     }
 
@@ -231,6 +235,5 @@ public class TaskService {
         discus.setUpdateDate(date);
         return discussionRepository.save(discus);
     }
-
 
 }

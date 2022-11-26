@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface DiscussionRepository extends JpaRepository<Discussion , Integer> {
     List<Discussion> findByTaskIdOrderByCreatedDateDesc(Integer taskId);
     Discussion findByDiscusId(String discusId);
+    List<Discussion> findByTaskId(Integer taskId);
 }

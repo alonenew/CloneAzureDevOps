@@ -32,15 +32,14 @@ public class RelationService {
         UUID uuid2 = UUID.randomUUID();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
-        Relation findRelation = relationRepository.findByTaskId(relationRequest.getTaskId());
-        if((findRelation != null) 
-        && (
-            (findRelation.getLinkType() > 3) 
-            || (findRelation.getTaskLink() == relationRequest.getTaskLink())
-        )
-        ){
+
+
+        if(relationRepository.findByLinkTypeAndTaskLink(relationRequest.getLinkType(),relationRequest.getTaskLink()) != null) {
             return false;
-        }else{
+        }else if(relationRepository.findByLinkTypeAndTaskId(relationRequest.getLinkType(),relationRequest.getTaskId()) != null){
+            return false;
+        }
+        else{
             Relation relation = new Relation();
             relation.setRelationId(dateFormat.format(date) + uuid.toString());
             relation.setLinkType(relationRequest.getLinkType());
@@ -51,12 +50,12 @@ public class RelationService {
             relation.setCreatedDate(date);
             relation.setUpdateBy(relationRequest.getCustomerId());
             relation.setUpdateDate(date);
-
+            
             Relation relation2 = new Relation();
             relation2.setRelationId(dateFormat.format(date) + uuid2.toString());
             if (relationRequest.getLinkType() == 1) {
                 relation2.setLinkType(2);
-            } else if (relationRequest.getLinkType() == 2) {
+            }else if(relationRequest.getLinkType() == 2) {
                 relation2.setLinkType(1);
             }else{
                 relation2.setLinkType(3);
@@ -68,13 +67,24 @@ public class RelationService {
             relation2.setCreatedDate(date);
             relation2.setUpdateBy(relationRequest.getCustomerId());
             relation2.setUpdateDate(date);
-
+            
             relationRepository.saveAll(List.of(relation, relation2));
             return true;
         }
+        
+    }
 
-        
-        
+    @Transactional
+    public String removeRelation(Integer taskId, Integer taskLink) throws NullPointerException{
+        Relation removeParent = relationRepository.findByTaskIdAndTaskLink(taskId,taskLink);
+        Relation removeChild = relationRepository.findByTaskIdAndTaskLink(taskLink,taskId);
+        if(removeParent == null && removeChild == null) {
+            throw new NullPointerException("Null");
+        }else{
+            relationRepository.delete(removeParent);
+            relationRepository.delete(removeChild);
+            return "Success";
+        }
     }
 
     
