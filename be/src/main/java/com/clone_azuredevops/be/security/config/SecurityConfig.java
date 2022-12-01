@@ -42,13 +42,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     String updateAssign = "/**/api/tasks/updateAssign";
     String getRelation = "/**/api/relation/getRelation";
     String addRelation = "/**/api/relation/addRelation";
+    String addDiscus = "/**/api/task/addDiscus";
+    String removeRelation = "/**/api/relation/remove";
  
     @Override
     protected void configure (HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .authorizeRequests().antMatchers(updateAssign,updateDiscusById,addRelation,getRelation,
+            .authorizeRequests().antMatchers(updateAssign,updateDiscusById,addRelation,getRelation,addDiscus,removeRelation,
             getDiscus,register,login,relogin,addtask,gettask,remove,update,gettaskid,adddetail,customerid,deleteDiscusById,customerall).anonymous()
             .anyRequest().authenticated()
             .and()

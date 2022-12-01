@@ -17,6 +17,7 @@ import com.clone_azuredevops.be.entity.jpa.task.Task;
 import com.clone_azuredevops.be.exception.BaseException;
 import com.clone_azuredevops.be.model.task.AddDetailRequest;
 import com.clone_azuredevops.be.model.task.DiscussionRequest;
+import com.clone_azuredevops.be.model.task.DiscussionResponse;
 import com.clone_azuredevops.be.model.task.TaskRequest;
 import com.clone_azuredevops.be.model.task.TaskResponse;
 import com.clone_azuredevops.be.repository.jpa.DiscussionRepository;
@@ -113,10 +114,38 @@ public class TaskService {
         taskResponse.setUpdateBy(task.getUpdateBy());
         taskResponse.setCreatedDate(task.getCreatedDate());
         taskResponse.setUpdateDate(task.getUpdateDate());
-        List<Discussion> discussionList = discussionRepository.findByTaskId(task.getTaskId());
         taskResponse.setDiscussion(discussionRepository.findByTaskId(task.getTaskId()));
 
         return taskResponse;
+    }
+
+    public DiscussionResponse addDiscus(AddDetailRequest addDetailRequest) {
+        Discussion discussion = new Discussion();
+        UUID uuid = UUID.randomUUID();
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        Date date = new Date();
+        DiscussionResponse discussionResponse = new DiscussionResponse();
+
+            discussion.setDiscusId(dateFormat.format(date) + uuid.toString());
+            discussion.setCustomerId(addDetailRequest.getCustomerId());
+            discussion.setTaskId(addDetailRequest.getTaskId());
+            discussion.setComment(addDetailRequest.getDiscussion());
+            discussion.setCreatedBy(addDetailRequest.getCreatedBy());
+            discussion.setUpdateBy(addDetailRequest.getCustomerId());
+            discussion.setCreatedDate(date);
+            discussion.setUpdateDate(date);
+            discussionRepository.save(discussion);
+
+            discussionResponse.setDiscusId(discussion.getDiscusId());
+            discussionResponse.setCustomerId(discussion.getCustomerId());
+            discussionResponse.setTaskId(discussion.getTaskId());
+            discussionResponse.setComment(discussion.getComment());
+            discussionResponse.setCreatedBy(discussion.getCreatedBy());
+            discussionResponse.setUpdateBy(discussion.getCustomerId());
+            discussionResponse.setCreatedDate(discussion.getCreatedDate());
+            discussionResponse.setUpdateDate(discussion.getUpdateDate());
+
+        return discussionResponse;
     }
 
     public List<Task> getTask() {

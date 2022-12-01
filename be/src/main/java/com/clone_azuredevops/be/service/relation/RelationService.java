@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clone_azuredevops.be.entity.jpa.relation.Relation;
 import com.clone_azuredevops.be.model.relation.RelationRequest;
+import com.clone_azuredevops.be.model.relation.RemoveRelationRequest;
 import com.clone_azuredevops.be.repository.jpa.RelationRepository;
 import com.clone_azuredevops.be.repository.jpa.TaskRepository;
 
@@ -75,9 +76,9 @@ public class RelationService {
     }
 
     @Transactional
-    public String removeRelation(Integer taskId, Integer taskLink) throws NullPointerException{
-        Relation removeParent = relationRepository.findByTaskIdAndTaskLink(taskId,taskLink);
-        Relation removeChild = relationRepository.findByTaskIdAndTaskLink(taskLink,taskId);
+    public String removeRelation(RemoveRelationRequest removeRelation)throws NullPointerException{
+        Relation removeParent = relationRepository.findByTaskIdAndTaskLink(removeRelation.getTaskId(),removeRelation.getTaskLink());
+        Relation removeChild = relationRepository.findByTaskIdAndTaskLink(removeRelation.getTaskLink(),removeRelation.getTaskId());
         if(removeParent == null && removeChild == null) {
             throw new NullPointerException("Null");
         }else{

@@ -10,7 +10,7 @@ import lombok.Setter;
 public class DiscussionResponse {
     private String discusId;
     private String customerId;
-    private String taskId;
+    private Integer taskId;
     private String comment;
     private String name;
     private Date createdDate;
